@@ -40,7 +40,7 @@ export default function App() {
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15] mix-blend-overlay" />
         </div>
 
-        <div className="w-full z-10 flex flex-col items-center justify-center min-h-screen py-12">
+        <div className="w-full z-10 flex flex-col items-center justify-center min-h-screen py-6 md:py-12">
           <AnimatePresence mode="wait">
             {screen === "intro" && (
               <Intro 

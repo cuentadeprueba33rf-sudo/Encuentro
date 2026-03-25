@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "motion/react";
 import { Lock } from "lucide-react";
 
@@ -6,7 +7,7 @@ interface IntroProps {
   onAdmin: () => void;
 }
 
-export function Intro({ onStart, onAdmin }: IntroProps) {
+export const Intro: React.FC<IntroProps> = ({ onStart, onAdmin }) => {
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -24,11 +25,11 @@ export function Intro({ onStart, onAdmin }: IntroProps) {
           Protocolo ZyphraCode v2.0
         </motion.div>
 
-        <h1 className="text-5xl md:text-7xl font-display font-bold text-white mb-6 tracking-tight leading-[1.1]">
+        <h1 className="text-3xl md:text-7xl font-display font-bold text-white mb-6 tracking-tight leading-[1.1]">
           Test de <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-500">Honestidad Brutal</span>
         </h1>
         
-        <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mb-12 leading-relaxed">
+        <p className="text-zinc-400 text-base md:text-xl max-w-2xl mb-12 leading-relaxed">
           Un sistema de evaluación personal de alta fidelidad. 
           Tus respuestas serán procesadas mediante algoritmos de encriptación irreversible.
         </p>
