@@ -54,119 +54,140 @@ export function Survey({ onComplete }: SurveyProps) {
   };
 
   return (
-    <div className="max-w-2xl w-full mx-auto px-4 py-12">
-      <div className="mb-8 flex justify-between items-center text-zinc-500 text-sm font-mono">
-        <span>Sujeto de prueba #{Math.floor(Math.random() * 9000) + 1000}</span>
-        <span>{currentIndex + 1} / {QUESTIONS.length}</span>
+    <div className="max-w-3xl w-full mx-auto px-6 py-12">
+      <div className="mb-12 flex justify-between items-end">
+        <div>
+          <div className="text-indigo-400 text-[10px] font-bold tracking-[0.2em] uppercase mb-2">
+            Session ID: {Math.floor(Math.random() * 900000) + 100000}
+          </div>
+          <h3 className="text-zinc-500 text-sm font-medium">
+            Módulo de Evaluación {currentIndex + 1} de {QUESTIONS.length}
+          </h3>
+        </div>
+        <div className="text-right">
+          <span className="text-3xl font-display font-bold text-white">
+            {Math.round(((currentIndex + 1) / QUESTIONS.length) * 100)}%
+          </span>
+        </div>
       </div>
 
-      <div className="h-2 w-full bg-zinc-800 rounded-full mb-12 overflow-hidden">
+      <div className="h-1 w-full bg-zinc-900 rounded-full mb-20 overflow-hidden">
         <motion.div 
-          className="h-full bg-indigo-500"
+          className="h-full bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.5)]"
           initial={{ width: 0 }}
           animate={{ width: `${((currentIndex + 1) / QUESTIONS.length) * 100}%` }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.5, ease: "circOut" }}
         />
       </div>
 
-      <div className="relative min-h-[300px]">
+      <div className="relative min-h-[400px]">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentIndex}
             custom={direction}
-            initial={{ opacity: 0, x: 50 * direction }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 * direction }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
             className="absolute inset-0"
           >
-            <h2 className="text-2xl md:text-3xl font-medium text-white mb-8 leading-tight">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-12 leading-[1.2] tracking-tight">
               {question.label}
             </h2>
 
-            {question.type === "text" && (
-              <input
-                type="text"
-                autoFocus
-                value={currentAnswer}
-                onChange={(e) => setAnswers({ ...answers, [question.id]: e.target.value })}
-                onKeyDown={handleKeyDown}
-                placeholder="Escribe tu respuesta aquí..."
-                className="w-full bg-zinc-900/50 border border-zinc-700 rounded-xl p-4 text-white text-lg focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-              />
-            )}
-
-            {question.type === "select" && (
-              <div className="grid gap-3">
-                {question.options?.map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => {
-                      setAnswers({ ...answers, [question.id]: opt });
-                      setTimeout(() => {
-                        if (isLast) onComplete({ ...answers, [question.id]: opt });
-                        else { setDirection(1); setCurrentIndex(prev => prev + 1); }
-                      }, 300);
-                    }}
-                    className={`p-4 rounded-xl border text-left transition-all ${
-                      currentAnswer === opt 
-                        ? "bg-indigo-600/20 border-indigo-500 text-white" 
-                        : "bg-zinc-900/50 border-zinc-800 text-zinc-300 hover:border-zinc-600 hover:bg-zinc-800"
-                    }`}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {question.type === "scale" && (
-              <div className="flex flex-col gap-6">
-                <div className="flex justify-between gap-2">
-                  {Array.from({ length: (question.max || 5) - (question.min || 1) + 1 }).map((_, i) => {
-                    const val = (question.min || 1) + i;
-                    return (
-                      <button
-                        key={val}
-                        onClick={() => setAnswers({ ...answers, [question.id]: val })}
-                        className={`flex-1 aspect-square rounded-xl border flex items-center justify-center text-lg font-medium transition-all ${
-                          currentAnswer === val
-                            ? "bg-indigo-600 border-indigo-500 text-white scale-110 shadow-lg"
-                            : "bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:bg-zinc-800"
-                        }`}
-                      >
-                        {val}
-                      </button>
-                    );
-                  })}
+            <div className="max-w-2xl">
+              {question.type === "text" && (
+                <div className="relative group">
+                  <input
+                    type="text"
+                    autoFocus
+                    value={currentAnswer}
+                    onChange={(e) => setAnswers({ ...answers, [question.id]: e.target.value })}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Escribe tu respuesta..."
+                    className="w-full bg-transparent border-b-2 border-zinc-800 py-4 text-2xl text-white placeholder:text-zinc-700 focus:outline-none focus:border-indigo-500 transition-all duration-300"
+                  />
+                  <div className="absolute bottom-0 left-0 h-0.5 bg-indigo-500 w-0 group-focus-within:w-full transition-all duration-500" />
                 </div>
-                <div className="flex justify-between text-xs text-zinc-500 uppercase tracking-wider font-semibold">
-                  <span>Nada</span>
-                  <span>Totalmente</span>
+              )}
+
+              {question.type === "select" && (
+                <div className="grid gap-4">
+                  {question.options?.map((opt, idx) => (
+                    <button
+                      key={opt}
+                      onClick={() => {
+                        setAnswers({ ...answers, [question.id]: opt });
+                        setTimeout(() => {
+                          if (isLast) onComplete({ ...answers, [question.id]: opt });
+                          else { setDirection(1); setCurrentIndex(prev => prev + 1); }
+                        }, 400);
+                      }}
+                      className={`group relative p-5 rounded-2xl border text-left transition-all duration-300 flex items-center justify-between ${
+                        currentAnswer === opt 
+                          ? "bg-indigo-500/10 border-indigo-500 text-white" 
+                          : "bg-zinc-900/30 border-zinc-800/50 text-zinc-400 hover:border-zinc-700 hover:bg-zinc-800/50"
+                      }`}
+                    >
+                      <span className="text-lg font-medium">{opt}</span>
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                        currentAnswer === opt ? "border-indigo-500 bg-indigo-500" : "border-zinc-700"
+                      }`}>
+                        {currentAnswer === opt && <Check size={14} className="text-black stroke-[3]" />}
+                      </div>
+                    </button>
+                  ))}
                 </div>
-              </div>
-            )}
+              )}
+
+              {question.type === "scale" && (
+                <div className="flex flex-col gap-10">
+                  <div className="flex justify-between items-center gap-2">
+                    {Array.from({ length: (question.max || 5) - (question.min || 1) + 1 }).map((_, i) => {
+                      const val = (question.min || 1) + i;
+                      return (
+                        <button
+                          key={val}
+                          onClick={() => setAnswers({ ...answers, [question.id]: val })}
+                          className={`flex-1 h-16 rounded-xl border flex items-center justify-center text-xl font-display font-bold transition-all duration-300 ${
+                            currentAnswer === val
+                              ? "bg-white border-white text-black scale-105 shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                              : "bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:border-zinc-600 hover:text-zinc-300"
+                          }`}
+                        >
+                          {val}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="flex justify-between text-[10px] text-zinc-600 font-bold uppercase tracking-[0.2em]">
+                    <span>Mínimo</span>
+                    <span>Máximo</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      <div className="flex justify-between mt-12 pt-8 border-t border-zinc-800">
+      <div className="flex justify-between mt-20 pt-10 border-t border-zinc-900">
         <button
           onClick={handlePrev}
           disabled={currentIndex === 0}
-          className="flex items-center gap-2 px-6 py-3 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-zinc-400 transition-all"
+          className="flex items-center gap-3 px-6 py-3 rounded-full text-zinc-500 hover:text-white hover:bg-zinc-900 disabled:opacity-0 transition-all duration-300"
         >
-          <ArrowLeft size={20} />
-          <span>Atrás</span>
+          <ArrowLeft size={18} />
+          <span className="text-sm font-bold uppercase tracking-widest">Atrás</span>
         </button>
 
         <button
           onClick={handleNext}
           disabled={!currentAnswer && currentAnswer !== 0}
-          className="flex items-center gap-2 px-8 py-3 rounded-xl bg-white text-black font-bold hover:bg-zinc-200 disabled:opacity-50 disabled:hover:bg-white transition-all"
+          className="flex items-center gap-3 px-10 py-4 rounded-full bg-indigo-600 text-white font-bold hover:bg-indigo-500 disabled:opacity-50 disabled:grayscale transition-all duration-300 shadow-lg shadow-indigo-900/20"
         >
-          <span>{isLast ? "Finalizar" : "Siguiente"}</span>
-          {isLast ? <Check size={20} /> : <ArrowRight size={20} />}
+          <span className="text-sm uppercase tracking-widest">{isLast ? "Finalizar" : "Continuar"}</span>
+          {isLast ? <Check size={18} /> : <ArrowRight size={18} />}
         </button>
       </div>
     </div>

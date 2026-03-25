@@ -48,40 +48,41 @@ export function Admin({ onBack }: AdminProps) {
       >
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors"
+          className="flex items-center gap-2 text-zinc-500 hover:text-white mb-12 transition-colors group"
         >
-          <ArrowLeft size={20} />
-          <span>Volver</span>
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="text-xs font-bold uppercase tracking-widest">Volver</span>
         </button>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
-          <div className="flex flex-col items-center justify-center mb-8">
-            <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mb-4 border border-red-500/20">
+        <div className="bg-zinc-900/50 border border-zinc-800 rounded-3xl p-10 backdrop-blur-xl">
+          <div className="flex flex-col items-center justify-center mb-10">
+            <div className="w-20 h-20 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mb-6 border border-red-500/20">
               <Lock size={32} />
             </div>
-            <h2 className="text-2xl font-bold text-white">Acceso Restringido</h2>
-            <p className="text-zinc-500 text-sm mt-2 text-center">Ingresa la contraseña para acceder al decodificador.</p>
+            <h2 className="text-2xl font-display font-bold text-white">Acceso Restringido</h2>
+            <p className="text-zinc-500 text-xs mt-3 text-center font-medium uppercase tracking-widest">Security Protocol Required</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest ml-1">Master Key</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Contraseña"
-                className="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-4 text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all"
+                placeholder="••••••••"
+                className="w-full bg-black/40 border border-zinc-800 rounded-2xl p-4 text-white text-center tracking-[0.5em] focus:outline-none focus:border-red-500/50 transition-all"
                 autoFocus
               />
             </div>
             {authError && (
-              <p className="text-red-400 text-sm text-center">{authError}</p>
+              <p className="text-red-500 text-[10px] font-bold text-center uppercase tracking-widest animate-pulse">{authError}</p>
             )}
             <button
               type="submit"
-              className="w-full py-4 px-6 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold transition-all"
+              className="w-full py-4 px-6 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-bold text-sm uppercase tracking-[0.2em] transition-all shadow-lg shadow-red-900/20"
             >
-              Desbloquear
+              Autenticar
             </button>
           </form>
         </div>
@@ -94,91 +95,117 @@ export function Admin({ onBack }: AdminProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="max-w-3xl w-full mx-auto px-4 py-8"
+      className="max-w-5xl w-full mx-auto px-6 py-8"
     >
-      <button
-        onClick={onBack}
-        className="flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors"
-      >
-        <ArrowLeft size={20} />
-        <span>Volver</span>
-      </button>
-
-      <div className="flex items-center gap-3 mb-8">
-        <div className="p-3 bg-red-500/10 text-red-500 rounded-xl border border-red-500/20">
-          <Unlock size={24} />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold text-white">Terminal Admin</h2>
-          <p className="text-zinc-500 text-sm">Decodificador ZyphraCode v2</p>
-        </div>
-      </div>
-
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 mb-8">
-        <label className="block text-sm font-medium text-zinc-400 mb-2">
-          Ingresa el código Zyphra:
-        </label>
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="w-full h-32 bg-zinc-950 border border-zinc-700 rounded-xl p-4 text-zinc-300 font-mono text-sm focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all mb-4 custom-scrollbar"
-          placeholder="ZYPH-..."
-        />
-        
+      <div className="flex justify-between items-center mb-12">
         <button
-          onClick={handleDecode}
-          disabled={!input}
-          className="w-full py-3 px-4 bg-red-600 hover:bg-red-500 disabled:bg-zinc-800 disabled:text-zinc-500 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2"
+          onClick={onBack}
+          className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors group"
         >
-          <Unlock size={18} />
-          <span>Decodificar</span>
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="text-xs font-bold uppercase tracking-widest">Cerrar Sesión</span>
         </button>
-
-        {error && (
-          <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3 text-red-400">
-            <AlertTriangle size={20} className="shrink-0 mt-0.5" />
-            <p className="text-sm">{error}</p>
+        
+        <div className="flex items-center gap-3">
+          <div className="text-right">
+            <div className="text-white text-xs font-bold uppercase tracking-widest">Admin Terminal</div>
+            <div className="text-green-500 text-[10px] font-bold uppercase tracking-widest">System Online</div>
           </div>
-        )}
+          <div className="w-10 h-10 bg-zinc-900 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-400">
+            <Unlock size={18} />
+          </div>
+        </div>
       </div>
 
-      {decodedData && (
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden"
-        >
-          <div className="bg-zinc-950 px-6 py-4 border-b border-zinc-800 flex justify-between items-center">
-            <h3 className="font-bold text-white">Datos Extraídos</h3>
-            <span className="text-xs font-mono text-zinc-500 bg-zinc-900 px-2 py-1 rounded">JSON PARSED</span>
-          </div>
-          
-          <div className="p-6">
-            <div className="space-y-6">
-              {QUESTIONS.map((q) => {
-                const answer = decodedData[q.id];
-                if (answer === undefined) return null;
-                
-                return (
-                  <div key={q.id}>
-                    <p className="text-sm text-zinc-400 mb-2">{q.label}</p>
-                    <div className="bg-zinc-950 p-3 rounded-lg border border-zinc-800 text-zinc-200">
-                      {answer}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+      <div className="grid md:grid-cols-[1fr_1.5fr] gap-8 items-start">
+        <div className="space-y-6">
+          <div className="bg-zinc-900/50 border border-zinc-800 rounded-3xl p-8 backdrop-blur-xl">
+            <h3 className="text-white text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+              Entrada de Datos
+            </h3>
             
-            <div className="mt-8 pt-6 border-t border-zinc-800">
-              <p className="text-xs text-zinc-500 mb-2 font-mono">RAW JSON:</p>
-              <pre className="text-xs text-zinc-400 bg-zinc-950 p-4 rounded-lg overflow-x-auto custom-scrollbar border border-zinc-800">
-                {JSON.stringify(decodedData, null, 2)}
-              </pre>
-            </div>
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="w-full h-48 bg-black/40 border border-zinc-800 rounded-2xl p-5 text-zinc-400 font-mono text-xs focus:outline-none focus:border-indigo-500/50 transition-all mb-6 custom-scrollbar leading-relaxed"
+              placeholder="Pegue el código ZYPH-..."
+            />
+            
+            <button
+              onClick={handleDecode}
+              disabled={!input}
+              className="w-full py-4 px-4 bg-white text-black hover:bg-zinc-200 disabled:bg-zinc-900 disabled:text-zinc-700 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+            >
+              <Unlock size={14} />
+              <span>Ejecutar Decodificación</span>
+            </button>
+
+            {error && (
+              <div className="mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-start gap-3 text-red-500">
+                <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+                <p className="text-[10px] font-bold uppercase tracking-widest leading-relaxed">{error}</p>
+              </div>
+            )}
           </div>
-        </motion.div>
-      )}
+        </div>
+
+        <div className="min-h-[600px]">
+          <AnimatePresence mode="wait">
+            {decodedData ? (
+              <motion.div 
+                key="results"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="bg-zinc-900/50 border border-zinc-800 rounded-3xl overflow-hidden backdrop-blur-xl"
+              >
+                <div className="bg-black/40 px-8 py-5 border-b border-zinc-800 flex justify-between items-center">
+                  <h3 className="font-bold text-white text-xs uppercase tracking-widest">Resultados del Análisis</h3>
+                  <div className="flex gap-2">
+                    <div className="w-2 h-2 rounded-full bg-red-500/50" />
+                    <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
+                    <div className="w-2 h-2 rounded-full bg-green-500/50" />
+                  </div>
+                </div>
+                
+                <div className="p-8 space-y-8 max-h-[600px] overflow-y-auto custom-scrollbar">
+                  {QUESTIONS.map((q) => {
+                    const answer = decodedData[q.id];
+                    if (answer === undefined) return null;
+                    
+                    return (
+                      <div key={q.id} className="group">
+                        <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-3 group-hover:text-indigo-400 transition-colors">
+                          {q.label}
+                        </p>
+                        <div className="bg-black/30 p-4 rounded-2xl border border-zinc-800/50 text-zinc-300 text-sm leading-relaxed">
+                          {answer}
+                        </div>
+                      </div>
+                    );
+                  })}
+                  
+                  <div className="mt-12 pt-8 border-t border-zinc-800/50">
+                    <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest mb-4">Raw System Data</p>
+                    <pre className="text-[10px] text-zinc-500 bg-black/50 p-6 rounded-2xl overflow-x-auto custom-scrollbar border border-zinc-800/50 font-mono leading-relaxed">
+                      {JSON.stringify(decodedData, null, 2)}
+                    </pre>
+                  </div>
+                </div>
+              </motion.div>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center p-12 bg-zinc-900/20 border border-zinc-800/50 border-dashed rounded-3xl">
+                <div className="w-16 h-16 bg-zinc-900 rounded-full flex items-center justify-center text-zinc-700 mb-6">
+                  <Unlock size={32} />
+                </div>
+                <h3 className="text-zinc-500 font-display font-bold text-lg mb-2">Esperando Datos</h3>
+                <p className="text-zinc-700 text-sm max-w-xs">Ingrese un código Zyphra válido para iniciar el proceso de extracción de datos.</p>
+              </div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
     </motion.div>
   );
 }
